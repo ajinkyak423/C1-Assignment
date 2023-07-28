@@ -1,0 +1,24 @@
+# name: Build Docker Image
+
+# on:
+#   push:
+#     branches:
+#       - main  
+      
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
+
+#       - name: Log in to Docker Hub
+#         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+#       - name: Build Docker image
+#         run: docker build -t ajinkyak423/assignment:latest .
+
+#       - name: Push Docker image to Docker Hub
+#         run: docker push ajinkyak423/assignment:latest
+

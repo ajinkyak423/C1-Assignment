@@ -1,0 +1,56 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq and curl
+        run: |
+          sudo apt update
+          sudo apt install -y jq curl
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check for merged pull request
+        id: check_merged_pr
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged && github.event.pull_request.base.ref == 'main' }}
+        run: echo "pull_request_merged=true" >> $GITHUB_ENV
+
+      - name: Show Pull Request Merged Status
+        run: echo "Pull Request Merged = ${{ env.pull_request_merged }}"
+
+      - name: Check for commit message
+        id: check_commit_message
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          if grep -q "BUILD_CONTAINER_IMAGE" <<< "${{ github.event.head_commit.message }}"; then
+            echo "commit_message=true" >> $GITHUB_ENV
+          else
+            echo "commit_message=false" >> $GITHUB_ENV
+          fi
+
+      - name: Show Commit Message Status
+        run: echo "Commit Message = ${{ env.commit_message }}"
+
+      - name: Log in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Check conditions and build and push
+        run: |
+          if [ "${{ env.commit_message }}" == "true" ] || [ "${{ env.pull_request_merged }}" == "true" ]; then
+            docker build -t ajinkyak423/assignment:latest .
+            docker push ajinkyak423/assignment:latest
+          else
+            echo "Skipping container image build since commit message doesn't contain 'BUILD_CONTAINER_IMAGE'"
+          fi

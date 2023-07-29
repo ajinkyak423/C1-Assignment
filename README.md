@@ -33,7 +33,7 @@ Code in `Dockerfile`
 
 Also Code in `main.go` has to be updated to have [`github.com/xyproto/simpleredis/](http://github.com/xyproto/simpleredis/)v2` 
 
-![Untitled](https://github.com/shivam1750/Assignment/blob/main/images/build%20.png)
+![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/1060d2c7f9cd56588b5d640c99289a82af27a130/images/build%20.png)
 
 ## - Push that image to docker hub.
 
@@ -48,7 +48,7 @@ Explanation of YAML code in `.github/workflows/build-push-image.yml` which is us
     - **`Push Docker image to Docker Hub`**: This step runs the **`docker push`** command to push the built image (**`ajinkyak423/assignment:latest`**) to Docker Hub, making it accessible to others and usable for deployments.
 
 With this configuration, GitHub Actions will automatically trigger the workflow whenever you push changes to the **`main`** branch, and it will build and push the Docker image to Docker Hub, making it available for use.
-![Untitled](https://github.com/ajinkyak423/Assignment/blob/2aa81bab028415322ac2203d8baddfbf335b5f78/images/docker%20hub.png)
+![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/1060d2c7f9cd56588b5d640c99289a82af27a130/images/docker%20hub.png)
 
 # Phase II
 
@@ -97,9 +97,9 @@ Code Explanation:
     
 6. Obtained Minikube Ip using `minikube ip`
 7. Accessed application using **`<Minikube-IP>:30080`**
-![Untitled](https://github.com/shivam1750/Assignment/blob/8dfb055172bd8294379fbb819dedc8d3308a3db0/images/minikube%20setup.png)
+![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/1060d2c7f9cd56588b5d640c99289a82af27a130/images/minikube%20setup.png)
 
-![Untitled](https://github.com/shivam1750/Assignment/blob/8dfb055172bd8294379fbb819dedc8d3308a3db0/images/minikube%20deploymane.png)
+![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/1060d2c7f9cd56588b5d640c99289a82af27a130/images/minikube%20deploymane.png)
 
 # Phase III
 
@@ -114,11 +114,9 @@ Code Explanation:
 1.  When PR get merged in main/master branch from any other branch.
 
     
-    ![Untitled](https://github.com/shivam1750/Assignment/blob/8dfb055172bd8294379fbb819dedc8d3308a3db0/images/pull%20request%20from%20test%20branch%20to%20main.png)
+    ![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/1060d2c7f9cd56588b5d640c99289a82af27a130/images/confirm%20merge%20pr.png)
     
-    ![Untitled](https://github.com/shivam1750/Assignment/blob/8dfb055172bd8294379fbb819dedc8d3308a3db0/images/confirming%20merge%20.png)
-    
-    ![Untitled](https://github.com/shivam1750/Assignment/blob/8dfb055172bd8294379fbb819dedc8d3308a3db0/images/pull%20request%20merged.jpg)
+    ![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/1060d2c7f9cd56588b5d640c99289a82af27a130/images/pr%20mearged.png)
     
 2.  When commit message contains BUILD_CONTAINER_IMAGE string
    a. Added script in `Phasee_III-Condition-build.yaml` file to do so 
@@ -143,8 +141,8 @@ Code Explanation:
 
 first check if the commit message contains **`BUILD_CONTAINER_IMAGE`**, and we set the **`commit_message`** environment variable accordingly. Then, in the **`build`** job, we use the **`if`** condition to check the value of **`commit_message`** and whether the event is a merged pull request. If either condition is true, the Docker image will be built and pushed. Otherwise, the build steps will be skipped.
 
-![Untitled](https://github.com/ajinkyak423/Assignment/blob/8c80bdf6734749de3db0e54e03235bf857cc9844/images/no%20build.png)
+![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/1060d2c7f9cd56588b5d640c99289a82af27a130/images/1%20condition%20build%20success.png)
 
-![Untitled](https://github.com/ajinkyak423/Assignment/blob/8c80bdf6734749de3db0e54e03235bf857cc9844/images/condition%20build%20success.png)
+![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/c144d81c346b3443b333bd8d40035ab0368c3cb0/images/1%20no%20build%20.png)
 
 ![Untitled](https://github.com/ajinkyak423/Assignment/blob/8c57759d19d3ac07bce0d1019574ad9dd7714f16/images/build%20after%20pull%20req%20merged.png)

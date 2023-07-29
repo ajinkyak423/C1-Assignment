@@ -1,4 +1,5 @@
 # CI
+
 # Assignment 1
 
 # Phase I:
@@ -123,25 +124,21 @@ Code Explanation:
    a. Added script in `Phasee_III-Condition-build.yaml` file to do so 
 
 ```yaml
-- name: Check for commit message
-        id: check_commit_message
+- name: Check for merged pull request
+        id: check_merged_pr
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged && github.event.pull_request.base.ref == 'main' }}
+        run: echo "pull_request_merged=true" >> $GITHUB_ENV
+
+
+
+- name: Check conditions and build and push
         run: |
-          if grep -q "BUILD_CONTAINER_IMAGE" <<< "${{ github.event.head_commit.message }}"; then
-            echo "commit_message=true" >> $GITHUB_ENV
+          if [ "${{ env.commit_message }}" == "true" ] || [ "${{ env.pull_request_merged }}" == "true" ]; then
+            docker build -t ajinkyak423/assignment:latest .
+            docker push ajinkyak423/assignment:latest
           else
-            echo "commit_message=false" >> $GITHUB_ENV
+            echo "Skipping container image build since commit message doesn't contain 'BUILD_CONTAINER_IMAGE'"
           fi
-
-      - name: Log in to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build Docker image
-        if: env.commit_message == 'true' || (github.event_name == 'pull_request' && github.event.pull_request.merged)
-        run: docker build -t ajinkyak423/assignment:latest .
-
-      - name: Push Docker image to Docker Hub
-        if: env.commit_message == 'true' || (github.event_name == 'pull_request' && github.event.pull_request.merged)
-        run: docker push ajinkyak423/assignment:latest
 ```
 
 first check if the commit message contains **`BUILD_CONTAINER_IMAGE`**, and we set the **`commit_message`** environment variable accordingly. Then, in the **`build`** job, we use the **`if`** condition to check the value of **`commit_message`** and whether the event is a merged pull request. If either condition is true, the Docker image will be built and pushed. Otherwise, the build steps will be skipped.

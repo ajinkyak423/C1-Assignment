@@ -145,4 +145,4 @@ first check if the commit message contains **`BUILD_CONTAINER_IMAGE`**, and we s
 
 ![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/c144d81c346b3443b333bd8d40035ab0368c3cb0/images/1%20no%20build%20.png)
 
-![Untitled](https://github.com/ajinkyak423/Assignment/blob/8c57759d19d3ac07bce0d1019574ad9dd7714f16/images/build%20after%20pull%20req%20merged.png)
+![Untitled](https://github.com/ajinkyak423/C1-Assignment/blob/92a14a4f09153c889ba08c83197e17b5e6661b6a/images/mearged%20pr%20build.png)

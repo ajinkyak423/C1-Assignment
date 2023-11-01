@@ -61,4 +61,4 @@ jobs:
         docker cp . $CONTAINER_ID:/srv/vehicle_lifecycle
         docker commit $CONTAINER_ID ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }} 
         docker rm -f $CONTAINER_ID  
-        docker push ajinkya423/assignment:${{ env.NEW_IMAGE_TAG }}
+        docker push ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }}

@@ -1,0 +1,67 @@
+name: Build and Push Docker Image
+
+on:
+    workflow_dispatch:
+        inputs:
+          amp_version_ref:
+            description: 'AMP Version Reference'
+            required: true
+          summon_tag:
+            description: 'Summon Tag'
+            required: true
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v4
+
+    - name: Generate New Image Tag
+      id: tag
+      run: |
+        summon_tag="${{ inputs.summon_tag }}"
+        amp_version_ref="${{ inputs.amp_version_ref }}"
+
+        amp_version_ref="${amp_version_ref:0:7}"
+
+        PART1=$(echo "$summon_tag" | cut -d '-' -f 1-2)
+        PART2=$(echo "$summon_tag" | cut -d '-' -f 3-)
+
+        NEW_IMAGE_TAG="$PART1-$amp_version_ref-$PART2"
+        echo "NEW_IMAGE_TAG=$NEW_IMAGE_TAG" >> $GITHUB_ENV
+
+        echo "New_Image_Tag=$NEW_IMAGE_TAG"
+
+    # - name: Authenticate with GCR
+    #   run: |
+    #     echo ${{ secrets.GCR_KEY_FILE }} | base64 -d > gcr-service-account.json
+    #     gcloud auth activate-service-account --key-file=gcr-service-account.json
+    #   env:
+    #     GCR_KEY_FILE: ${{ secrets.GCR_KEY_FILE }}
+
+    - name: Log in to Docker Hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Fetch the Docker image from GCR
+      run: |
+        docker pull ajinka4ridecell/prediction:3.8
+    #   env:
+    #     GCR_PROJECT: your-project
+    #     GCR_IMAGE: your-image
+    #     GCR_TAG: your-tag
+
+    - name: Run the Docker container and copy the repo code
+      run: |
+        docker run -d --name my-container ajinka4ridecell/prediction:3.8
+        docker cp . my-container:/srv
+        docker commit my-container ajinka4ridecell/prediction:${{ env.NEW_IMAGE_TAG }} 
+        docker stop my-container
+        docker rm my-container
+
+        CONTAINER_ID=$(docker run -d ajinka4ridecell/prediction:3.8 sleep infinity)
+        docker cp . $CONTAINER_ID:/srv/vehicle_lifecycle
+        docker commit $CONTAINER_ID us.gcr.io/ridecell-1/summon:${{ env.NEW_IMAGE_TAG }} 
+        docker rm -f $CONTAINER_ID  
+        docker push ajinka4ridecell/prediction:${{ env.NEW_IMAGE_TAG }}

@@ -57,12 +57,6 @@ jobs:
 
     - name: Run the Docker container and copy the repo code
       run: |
-        docker run -d --name my-container ajinka4ridecell/prediction:3.8
-        docker cp . my-container:/srv
-        docker commit my-container ajinka4ridecell/prediction:${{ env.NEW_IMAGE_TAG }} 
-        docker stop my-container
-        docker rm my-container
-
         CONTAINER_ID=$(docker run -d ajinka4ridecell/prediction:3.8 sleep infinity)
         docker cp . $CONTAINER_ID:/srv/vehicle_lifecycle
         docker commit $CONTAINER_ID us.gcr.io/ridecell-1/summon:${{ env.NEW_IMAGE_TAG }} 

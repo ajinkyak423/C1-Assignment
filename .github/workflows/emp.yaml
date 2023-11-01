@@ -15,8 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the code
+    - name: Check out asset-management-plugins
       uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.amp_version_ref }}
+
 
     - name: Generate New Image Tag
       id: tag

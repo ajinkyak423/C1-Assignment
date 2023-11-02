@@ -30,12 +30,14 @@ jobs:
         amp_version_ref="${amp_version_ref:0:7}"
 
         PART1=$(echo "$summon_tag" | cut -d '-' -f 1-2)
-        PART2=$(echo "$summon_tag" | cut -d '-' -f 3-)
+        PART2="am"
 
         NEW_IMAGE_TAG="$PART1-$amp_version_ref-$PART2"
         echo "NEW_IMAGE_TAG=$NEW_IMAGE_TAG" >> $GITHUB_ENV
 
         echo "New_Image_Tag=$NEW_IMAGE_TAG"
+
+        
 
     # - name: Authenticate with GCR
     #   run: |
@@ -47,9 +49,13 @@ jobs:
     - name: Log in to Docker Hub
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Fetch the Docker image from GCR
+    - name: Build Docker image
       run: |
-        docker pull ajinkyak423/assignment:3.8
+        docker build --build-arg SUMMON_PLATFORM_IMAGE=${{ inputs.summon_tag }} -t ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }} .
+
+    # - name: Fetch the Docker image from GCR
+    #   run: |
+    #     docker pull ajinkyak423/assignment:3.8
     #   env:
     #     GCR_PROJECT: your-project
     #     GCR_IMAGE: your-image
@@ -57,8 +63,8 @@ jobs:
 
     - name: Run the Docker container and copy the repo code
       run: |
-        CONTAINER_ID=$(docker run -d ajinkyak423/assignment:3.8 sleep infinity)
-        docker cp . $CONTAINER_ID:/srv/vehicle_lifecycle
-        docker commit $CONTAINER_ID ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }} 
-        docker rm -f $CONTAINER_ID  
+        # CONTAINER_ID=$(docker run -d ajinkyak423/assignment:3.8 sleep infinity)
+        # docker cp . $CONTAINER_ID:/srv/vehicle_lifecycle
+        # docker commit $CONTAINER_ID ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }} 
+        # docker rm -f $CONTAINER_ID  
         docker push ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }}

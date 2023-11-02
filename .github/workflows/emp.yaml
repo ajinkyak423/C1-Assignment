@@ -51,7 +51,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build --build-arg SUMMON_PLATFORM_IMAGE=${{ inputs.summon_tag }} -t ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }} .
+        docker build --build-arg SUMMON_PLATFORM_IMAGE=${{ inputs.summon_tag }} -t ajinkyak423/assignment:${{ env.NEW_IMAGE_TAG }} . -f Dockerfile.build
 
     # - name: Fetch the Docker image from GCR
     #   run: |

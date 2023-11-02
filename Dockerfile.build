@@ -1,4 +1,4 @@
 ARG SUMMON_PLATFORM_IMAGE
-FROM ajinkyak423/assignment:${SUMMON_PLATFORM_IMAGE} as summon
+FROM ajinkyak423/assignment${SUMMON_PLATFORM_IMAGE} as summon
 WORKDIR /srv/vehicle_lifecycle
 COPY . .

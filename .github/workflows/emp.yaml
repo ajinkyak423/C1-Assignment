@@ -21,12 +21,19 @@ jobs:
       run: |
         TAG=$(awk '/^FROM/ {print $2}' Dockerfile.build | cut -d ':' -f2)
         PART1=$(echo "$TAG" | cut -d '-' -f 1-2)
-        PART2="am"
 
-        NEW_IMAGE_TAG="$PART1-${{ github.sha }}-$PART2"
+        NEW_IMAGE_TAG="$PART1"
         echo "NEW_IMAGE_TAG=$NEW_IMAGE_TAG" >> $GITHUB_ENV
 
         echo "New_Image_Tag=$NEW_IMAGE_TAG"
+    
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ajinkyak423/assignment
+        tags: |
+          type=raw,value=${{ env.NEW_IMAGE_TAG }}-{{sha}}-"am"
 
         
 

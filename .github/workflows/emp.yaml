@@ -1,15 +1,10 @@
 name: Build and Push Docker Image
 
 on:
-    workflow_dispatch:
-        inputs:
-          amp_version_ref:
-            description: 'AMP Version Reference'
-            required: true
-          summon_tag:
-            description: 'Summon Tag'
-            required: true
-
+  push:
+    branches:
+      - '**' 
+      
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -18,21 +13,17 @@ jobs:
     - name: Check out asset-management-plugins
       uses: actions/checkout@v4
       with:
-        ref: ${{ inputs.amp_version_ref }}
+        ref: ${{ github.ref }}
 
 
     - name: Generate New Image Tag
       id: tag
       run: |
-        summon_tag="${{ inputs.summon_tag }}"
-        amp_version_ref="${{ inputs.amp_version_ref }}"
-
-        amp_version_ref="${amp_version_ref:0:7}"
-
-        PART1=$(echo "$summon_tag" | cut -d '-' -f 1-2)
+        TAG=$(awk '/^FROM/ {print $2}' Dockerfile | cut -d ':' -f2)
+        PART1=$(echo "$TAG" | cut -d '-' -f 1-2)
         PART2="am"
 
-        NEW_IMAGE_TAG="$PART1-$amp_version_ref-$PART2"
+        NEW_IMAGE_TAG="$PART1-${{ github.sha }}-$PART2"
         echo "NEW_IMAGE_TAG=$NEW_IMAGE_TAG" >> $GITHUB_ENV
 
         echo "New_Image_Tag=$NEW_IMAGE_TAG"

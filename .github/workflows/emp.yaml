@@ -33,7 +33,7 @@ jobs:
       with:
         images: ajinkyak423/assignment
         tags: |
-          type=raw,value=${{ env.NEW_IMAGE_TAG }}-{{sha}}-"am"
+          type=raw,value=${{ env.NEW_IMAGE_TAG }}-{{sha}}-am
 
         
 

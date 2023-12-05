@@ -19,7 +19,7 @@ jobs:
     - name: Generate New Image Tag
       id: tag
       run: |
-        TAG=$(awk '/^FROM/ {print $2}' Dockerfile | cut -d ':' -f2)
+        TAG=$(awk '/^FROM/ {print $2}' Dockerfile.build | cut -d ':' -f2)
         PART1=$(echo "$TAG" | cut -d '-' -f 1-2)
         PART2="am"
 

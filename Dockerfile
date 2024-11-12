@@ -30,7 +30,7 @@
 # EXPOSE 3000
 
 
-FROM python:3.8-slim
+FROM ubuntu:latest
 WORKDIR /app
 RUN --mount=type=bind,id=MY_SECRET,target=./secret.txt 
 COPY temp.sh .

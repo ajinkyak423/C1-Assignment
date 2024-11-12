@@ -31,4 +31,4 @@
 
 
 FROM python:3.8-slim
-RUN --mount=type=bind,id=MY_SECRET,target=/etc/config/intelligence.yml
+RUN --mount=type=bind,id=MY_SECRET,target=.

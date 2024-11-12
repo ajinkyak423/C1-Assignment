@@ -33,4 +33,4 @@
 FROM ubuntu:latest
 WORKDIR /app
 RUN --mount=type=bind,id=MY_SECRET,target=./secret.txt 
-RUN cat secret.txt
+RUN cat /app/secret.txt

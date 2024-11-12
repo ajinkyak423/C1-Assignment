@@ -31,5 +31,4 @@
 
 
 FROM python:3.8-slim
-RUN --mount=type=secret,id=config_file,target=/etc/config/intelligence.yml
-RUN --mount=type=secret,id=secret_file,target=/etc/secrets/intelligence.yml
+RUN --mount=type=bind,id=MY_SECRET,target=/etc/config/intelligence.yml

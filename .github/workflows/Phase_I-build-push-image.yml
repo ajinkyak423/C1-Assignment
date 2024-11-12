@@ -55,5 +55,4 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         secret-files: |
-            "config_file=./config/intelligence.yml"
-            "secret_file=./secrets/intelligence.yml"
+            "MY_SECRET=./secret.txt"  

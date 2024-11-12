@@ -32,3 +32,4 @@
 
 FROM python:3.8-slim
 RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN_AK
+RUN env

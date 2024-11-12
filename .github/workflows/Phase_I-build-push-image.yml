@@ -54,5 +54,5 @@ jobs:
         platforms: linux/arm64
         push: true
         tags: ${{ steps.meta.outputs.tags }}
-        secrets: |
-            "github_token=${{ secrets.GITHUB_TOKEN }}"
+        secret-files: |
+            - MY_SECRET=./secret.txt

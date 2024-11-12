@@ -31,5 +31,7 @@
 
 
 FROM python:3.8-slim
-RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN_AK
-RUN env
+RUN --mount=type=bind,id=MY_SECRET,target=./secret.txt 
+COPY temp.sh /temp.sh
+RUN chmod +x /temp.sh
+RUN ./temp.sh

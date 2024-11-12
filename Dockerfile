@@ -33,6 +33,4 @@
 FROM ubuntu:latest
 WORKDIR /app
 RUN --mount=type=bind,id=MY_SECRET,target=./secret.txt 
-COPY temp.sh .
-RUN chmod +x temp.sh
-RUN ./temp.sh
+RUN cat secret.txt

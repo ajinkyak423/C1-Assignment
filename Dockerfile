@@ -31,4 +31,4 @@
 
 
 FROM python:3.8-slim
-RUN --mount=type=bind,id=MY_SECRET,target=.
+RUN --mount=type=secret,id=MY_SECRET,env=MY_SECRET

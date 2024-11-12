@@ -51,6 +51,7 @@ jobs:
       with:
         file: Dockerfile
         context: .
+        platforms: linux/arm64
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         secret-files: |

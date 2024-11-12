@@ -31,4 +31,4 @@
 
 
 FROM python:3.8-slim
-RUN --mount=type=secret,id=MY_SECRET,env=MY_SECRET
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN_AK

@@ -31,6 +31,7 @@
 
 
 FROM python:3.8-slim
+WORKDIR /app
 RUN --mount=type=bind,id=MY_SECRET,target=./secret.txt 
 COPY temp.sh /temp.sh
 RUN chmod +x /temp.sh

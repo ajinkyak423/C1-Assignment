@@ -1,24 +1,58 @@
-# name: Build Docker Image
+name: Build and Push Docker Image
 
-# on:
-#   push:
-#     branches:
-#       - main  
+on:
+  push:
       
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v2
+    steps:
+    - name: Check out asset-management-plugins
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
 
-#       - name: Log in to Docker Hub
-#         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-#       - name: Build Docker image
-#         run: docker build -t ajinkyak423/assignment:latest .
+    - name: Generate New Image Tag
+      id: tag
+      run: |
+        TAG=$(awk '/^FROM/ {print $2}' Dockerfile.build | cut -d ':' -f2)
+        PART1=$(echo "$TAG" | cut -d '-' -f 1-2)
 
-#       - name: Push Docker image to Docker Hub
-#         run: docker push ajinkyak423/assignment:latest
+        NEW_IMAGE_TAG="$PART1"
+        echo "NEW_IMAGE_TAG=$NEW_IMAGE_TAG" >> $GITHUB_ENV
 
+        echo "New_Image_Tag=$NEW_IMAGE_TAG"
+    
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ajinkyak423/test
+        tags: |
+          type=raw,value=${{ env.NEW_IMAGE_TAG }}-{{sha}}-am
+
+
+    - name: Log in to Docker Hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: setup docker context for buildx
+      run: |
+        docker context create builders
+
+    - name: setup docker buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        endpoint: builders
+
+    - name: Build and Push App docker image
+      uses: docker/build-push-action@v5
+      with:
+        file: Dockerfile
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        secret-files: |
+            "config_file=./config/intelligence.yml"
+            "secret_file=./secrets/intelligence.yml"

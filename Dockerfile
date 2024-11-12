@@ -32,5 +32,5 @@
 
 FROM ubuntu:latest
 WORKDIR /app
-RUN --mount=type=bind,id=MY_SECRET,target=./secret.txt 
-RUN cat /app/secret.txt
+RUN --mount=type=bind,source=./secret.txt,target=/app/secret.txt \
+    cat /app/secret.txt

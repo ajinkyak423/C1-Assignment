@@ -32,5 +32,5 @@
 
 FROM ubuntu:latest
 WORKDIR /app
-RUN --mount=type=bind,source=./secret.txt,target=/app/secret.txt \
-    cat /app/secret.txt
+RUN --mount=type=bind,source=./secrets/intelligence.yml,target=/etc/secrets/intelligence.yml \
+    cat /etc/secrets/intelligence.yml
